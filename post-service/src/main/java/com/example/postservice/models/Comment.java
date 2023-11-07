@@ -1,27 +1,26 @@
 package com.example.postservice.models;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import java.util.Set;
 import java.util.UUID;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
-public class Post {
+public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     private UUID userId;
-    private String title;
     private String description;
 
-    @OneToMany(mappedBy = "post")
-    private Set<Comment> comments;
-    @OneToMany(mappedBy = "post")
-    private Set<Like> likes;
-
+    @ManyToOne
+    @JoinColumn(name = "post_id")
+    private Post post;
 }
