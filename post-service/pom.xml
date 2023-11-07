@@ -49,6 +49,12 @@
 		</dependency>
 		<dependency>
 			<groupId>org.mapstruct</groupId>
+			<artifactId>mapstruct-processor</artifactId>
+			<version>${version.mapstruct}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mapstruct</groupId>
 			<artifactId>mapstruct</artifactId>
 			<version>${version.mapstruct}</version>
 		</dependency>
@@ -95,17 +101,6 @@
 						<exclude>
 							<groupId>org.projectlombok</groupId>
 							<artifactId>lombok</artifactId>
-
-						</exclude>
-						<exclude>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok-mapstruct-binding</artifactId>
-							<version>${version.mapstruct-lombok}</version>
-						</exclude>
-						<exclude>
-							<groupId>org.mapstruct</groupId>
-							<artifactId>mapstruct-processor</artifactId>
-							<version>${version.mapstruct}</version>
 						</exclude>
 					</excludes>
 				</configuration>
