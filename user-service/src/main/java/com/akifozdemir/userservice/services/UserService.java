@@ -28,6 +28,18 @@ public class UserService {
         this.userRepository.save(user);
     }
 
+    public void update(UserRequest userRequest,UUID id){
+      User userToUpdate = this.userRepository.findById(id)
+             .orElseThrow(()->new UserNotFoundException("User not found!"));
+      userToUpdate.setDescription(userRequest.description());
+      userToUpdate.setEmail(userRequest.email());
+      userToUpdate.setPassword(userRequest.password());
+      userToUpdate.setFirstName(userRequest.firstName());
+      userToUpdate.setLastName(userRequest.lastName());
+      this.userRepository.save(userToUpdate);
+    }
+
+
     public UserResponse getById(UUID id){
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User not found!"));
@@ -40,6 +52,7 @@ public class UserService {
         return users.stream()
                 .map(user -> this.userMapper.userToResponse(user))
                 .collect(Collectors.toList());
+
     }
 
 }

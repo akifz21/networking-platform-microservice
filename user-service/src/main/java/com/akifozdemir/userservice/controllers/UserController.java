@@ -29,7 +29,13 @@ public class UserController {
     @PostMapping
     public ResponseEntity<String> add(@RequestBody UserRequest userRequest){
         this.userService.add(userRequest);
-        return ResponseEntity.ok().body("User Added"+userRequest.toString());
+        return ResponseEntity.ok().body("User Added "+userRequest.toString());
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<String> update(@RequestBody UserRequest userRequest,@PathVariable UUID id){
+        this.userService.update(userRequest,id);
+        return ResponseEntity.ok().body("User Updated");
     }
 
 }
