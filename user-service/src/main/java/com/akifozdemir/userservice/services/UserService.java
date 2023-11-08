@@ -2,14 +2,13 @@ package com.akifozdemir.userservice.services;
 
 import com.akifozdemir.userservice.dtos.UserRequest;
 import com.akifozdemir.userservice.dtos.UserResponse;
+import com.akifozdemir.userservice.exceptions.UserNotFoundException;
 import com.akifozdemir.userservice.mappers.UserMapper;
 import com.akifozdemir.userservice.models.User;
 import com.akifozdemir.userservice.repositories.UserRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -31,7 +30,7 @@ public class UserService {
 
     public UserResponse getById(UUID id){
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("User not found!"));
+                .orElseThrow(() -> new UserNotFoundException("User not found!"));
 
         return userMapper.userToResponse(user);
     }
