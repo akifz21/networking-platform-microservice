@@ -1,17 +1,11 @@
 package com.example.postservice.models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.UUID;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
+@Data
 @Entity
 @Table(name = "likes")
 public class Like {
@@ -23,7 +17,5 @@ public class Like {
     @ManyToOne
     @JoinColumn(name = "post_id")
     private Post post;
-
-
-
 }
+

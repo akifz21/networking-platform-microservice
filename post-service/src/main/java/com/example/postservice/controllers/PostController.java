@@ -1,6 +1,7 @@
 package com.example.postservice.controllers;
 
-import com.example.postservice.models.Post;
+import com.example.postservice.dtos.requests.PostRequest;
+import com.example.postservice.dtos.respones.PostResponse;
 import com.example.postservice.services.PostService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,13 +19,13 @@ public class PostController {
     }
 
     @PostMapping
-    public ResponseEntity<String> add(@RequestBody Post post){
-        this.postService.add(post);
+    public ResponseEntity<String> add(@RequestBody PostRequest postRequest){
+        this.postService.add(postRequest);
         return new ResponseEntity<>("Post added", HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<List<Post>> getAll(){
-        return new ResponseEntity<List<Post>>(this.postService.getAll(), HttpStatus.OK);
+    public ResponseEntity<List<PostResponse>> getAll(){
+        return new ResponseEntity<>(this.postService.getAll(), HttpStatus.OK);
     }
 }
