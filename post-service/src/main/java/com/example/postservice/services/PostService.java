@@ -4,9 +4,11 @@ import com.example.postservice.clients.UserClient;
 import com.example.postservice.dtos.requests.PostRequest;
 import com.example.postservice.dtos.respones.PostResponse;
 import com.example.postservice.dtos.respones.UserResponse;
+import com.example.postservice.exceptions.FetchException;
 import com.example.postservice.mappers.PostMapper;
 import com.example.postservice.models.Post;
 import com.example.postservice.repositories.PostRepository;
+import feign.FeignException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,18 +27,28 @@ public class PostService {
     }
 
     public void add(PostRequest postRequest){
-        UserResponse userResponse = userClient.getUserById(postRequest.userId());
-        if (userResponse !=null){
-            Post post = this.postMapper.requestToPost(postRequest);
-            this.postRepository.save(post);
-        }
+            try {
+                UserResponse userResponse = userClient.getUserById(postRequest.userId());
+                Post post = this.postMapper.requestToPost(postRequest);
+                this.postRepository.save(post);
+            }catch (FeignException e){
+                if (e instanceof FeignException.NotFound){
+                    throw new FetchException("User Not Found");
+                }
+                throw new FetchException("An error occurred during fetch");
+
+            }
     }
 
-    public List<PostResponse> getAll(){
-        List<Post> posts = this.postRepository.findAll();
-        return posts.stream()
-                .map(post -> this.postMapper.postToResponse(post))
-                .collect(Collectors.toList());
+    public List<PostResponse> getAllPostsWithUserDetails() {
+      try {
+          List<Post> posts = this.postRepository.findAll();
+          return posts.stream().map(post -> {
+              UserResponse userResponse = userClient.getUserById(post.getUserId());
+              return postMapper.postToResponse(post, userResponse);
+          }).collect(Collectors.toList());
+      }catch (FeignException e){
+          throw new FetchException("An error occurred during fetch");
+      }
     }
-
 }

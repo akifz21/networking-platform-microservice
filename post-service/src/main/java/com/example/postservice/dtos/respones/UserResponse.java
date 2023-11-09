@@ -1,6 +1,17 @@
 package com.example.postservice.dtos.respones;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.Objects;
 import java.util.UUID;
 
-public record UserResponse(UUID id,String firstName,String lastName) {
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public final class UserResponse {
+    private UUID id;
+    private String firstName;
+    private String lastName;
 }
