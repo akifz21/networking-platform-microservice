@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/posts")
@@ -24,8 +25,15 @@ public class PostController {
         return new ResponseEntity<>("Post added", HttpStatus.CREATED);
     }
 
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<PostResponse>> getByUser(@PathVariable UUID userId){
+        return ResponseEntity.ok().body(this.postService.getByUser(userId));
+    }
+
     @GetMapping
     public ResponseEntity<List<PostResponse>> getAll(){
         return new ResponseEntity<>(this.postService.getAllPostsWithUserDetails(), HttpStatus.OK);
     }
+
+
 }

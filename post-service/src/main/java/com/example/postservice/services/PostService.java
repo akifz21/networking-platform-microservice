@@ -12,6 +12,7 @@ import feign.FeignException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,6 +38,22 @@ public class PostService {
                 }
                 throw new FetchException("An error occurred during fetch");
 
+            }
+    }
+
+    public List<PostResponse> getByUser(UUID userId){
+            try {
+                UserResponse userResponse = userClient.getUserById(userId);
+                List<Post> posts = this.postRepository.findByUserId(userId);
+                return posts
+                        .stream()
+                        .map(post -> this.postMapper.postToResponse(post,userResponse))
+                        .collect(Collectors.toList());
+            }catch (FeignException e){
+                if (e instanceof FeignException.NotFound){
+                    throw new FetchException("User Not Found");
+                }
+                throw new FetchException("An error occurred during fetch");
             }
     }
 
