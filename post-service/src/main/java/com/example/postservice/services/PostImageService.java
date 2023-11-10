@@ -9,8 +9,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class PostImageService {
@@ -37,10 +39,17 @@ public class PostImageService {
     }
 
     public byte[] download(UUID id){
-        Optional<PostImage> postImage = postImageRepository.findPostImageByPost_Id(id);
+        Optional<PostImage> postImage = postImageRepository.findById(id);
         if (postImage.isPresent()){
             return ImageUtil.decompressImage(postImage.get().getData());
         }
         return null;
+    }
+
+    public List<byte[]> downloadAllImagesByPostId(UUID postId) {
+        List<PostImage> postImages = postImageRepository.findAllPostImageByPost_Id(postId);
+        return postImages.stream()
+                .map(postImage -> ImageUtil.decompressImage(postImage.getData()))
+                .collect(Collectors.toList());
     }
 }
