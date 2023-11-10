@@ -68,4 +68,9 @@ public class PostService {
           throw new FetchException("An error occurred during fetch");
       }
     }
+
+    public Post getById(UUID id){
+        return this.postRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Post not found"));
+    }
 }

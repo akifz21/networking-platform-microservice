@@ -20,4 +20,7 @@ public class Post {
     @OneToMany(mappedBy = "post")
     private Set<Like> likes;
 
+    @OneToMany(mappedBy = "post")
+    private Set<PostImage> postImages;
+
 }
