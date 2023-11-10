@@ -8,6 +8,7 @@ import com.example.postservice.repositories.LikeRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,13 +24,24 @@ public class LikeService {
         this.likeRepository.save(like);
     }
 
-    public List<LikeResponse> getAll( ){
+    public List<LikeResponse> getAll(){
         List<Like> likes = this.likeRepository.findAll();
         return likes.stream()
                 .map(like -> this.likeMapper.likeToResponse(like))
                 .collect(Collectors.toList());
     }
 
+    public List<LikeResponse> getByPost(UUID postId){
+        List<Like> likes = this.likeRepository.findByPost_Id(postId);
+        return likes.stream()
+                .map(like -> this.likeMapper.likeToResponse(like))
+                .collect(Collectors.toList());
+    }
 
-
+    public List<LikeResponse> getByUser(UUID userId){
+        List<Like> likes = this.likeRepository.findByUserId(userId);
+        return likes.stream()
+                .map(like -> this.likeMapper.likeToResponse(like))
+                .collect(Collectors.toList());
+    }
 }

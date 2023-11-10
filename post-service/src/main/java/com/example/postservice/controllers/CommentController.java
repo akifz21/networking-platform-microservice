@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/comments")
@@ -21,12 +22,21 @@ public class CommentController {
     @PostMapping
     public ResponseEntity<String> add(@RequestBody CommentAddRequest commentAddRequest){
         this.commentService.add(commentAddRequest);
-        return new ResponseEntity<>("Comment Added", HttpStatus.CREATED);
+        return ResponseEntity.ok().body("Comment Added");
     }
 
     @GetMapping
     public ResponseEntity<List<CommentResponse>> getAll(){
-        return new ResponseEntity<>(this.commentService.getAll(),HttpStatus.OK);
+        return ResponseEntity.ok().body(this.commentService.getAll());
+    }
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<CommentResponse>> getByUser(@PathVariable UUID userId){
+        return ResponseEntity.ok().body(this.commentService.getByUser(userId));
+    }
+
+    @GetMapping("/post/{postId}")
+    public ResponseEntity<List<CommentResponse>> getByPost(@PathVariable UUID postId){
+        return ResponseEntity.ok().body(this.commentService.getByPost(postId));
     }
 
 }
