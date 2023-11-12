@@ -46,6 +46,11 @@ public class UserController {
         }
         throw new RuntimeException("Invalid access");
     }
+    @PostMapping("/token/{token}")
+    public String validate(@PathVariable String token){
+        userService.validateToken(token);
+        return "Validate";
+    }
 
     @PutMapping("/{id}")
     public ResponseEntity<String> update(@RequestBody UserRequest userRequest,@PathVariable UUID id){

@@ -13,7 +13,12 @@ spring:
     name: gateway
   cloud:
     gateway:
+      default-filters:
+        - AuthenticationFilter
       discovery:
         locator:
           enabled: true
           lower-case-service-id: true
+
+jwt:
+  secret: mysupersecretkeymysupersecretkeymysupersecretkey
