@@ -1,10 +1,14 @@
 package com.example.postservice.services;
 
+import com.example.postservice.clients.UserClient;
 import com.example.postservice.dtos.requests.CommentAddRequest;
 import com.example.postservice.dtos.respones.CommentResponse;
+import com.example.postservice.dtos.respones.UserResponse;
+import com.example.postservice.exceptions.FetchException;
 import com.example.postservice.mappers.CommentMapper;
 import com.example.postservice.models.Comment;
 import com.example.postservice.repositories.CommentRepository;
+import feign.FeignException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,9 +20,13 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final CommentMapper commentMapper;
 
-    public CommentService(CommentRepository commentRepository,CommentMapper commentMapper){
+    private final UserClient userClient;
+
+    public CommentService(CommentRepository commentRepository,
+                          CommentMapper commentMapper,UserClient userClient){
         this.commentRepository = commentRepository;
         this.commentMapper = commentMapper;
+        this.userClient = userClient;
     }
 
     public void add(CommentAddRequest commentAddRequest){
@@ -41,10 +49,16 @@ public class CommentService {
 
 
     public List<CommentResponse> getByUser (UUID userId){
-        List<Comment> comments = this.commentRepository.findByUserId(userId);
-        return comments.stream()
-                .map(comment -> this.commentMapper.commentToResponse(comment))
-                .collect(Collectors.toList());
+      try {
+          UserResponse userResponse = this.userClient.getUserById(userId);
+          List<Comment> comments = this.commentRepository.findByUserId(userId);
+          return comments.stream()
+                  .map(comment -> this.commentMapper.commentToResponse(comment))
+                  .collect(Collectors.toList());
+      }catch (FeignException e){
+            if (e instanceof FeignException.NotFound) throw new FetchException("User not found");
+            throw new FetchException();
+      }
     }
 
 

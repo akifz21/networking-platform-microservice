@@ -41,10 +41,7 @@ public class PostImageController {
     @GetMapping("/{postId}/images")
     public ResponseEntity<List<byte[]>> getAllImagesByPostId(@PathVariable UUID postId) {
         List<byte[]> images = postImageService.downloadAllImagesByPostId(postId);
-        if (images != null && !images.isEmpty()) {
-            return ResponseEntity.ok(images);
-        } else {
-            return ResponseEntity.noContent().build();
-        }
+        return ResponseEntity.ok(images);
+
     }
 }

@@ -6,6 +6,8 @@ import com.akifozdemir.userservice.exceptions.UserNotFoundException;
 import com.akifozdemir.userservice.mappers.UserMapper;
 import com.akifozdemir.userservice.models.User;
 import com.akifozdemir.userservice.repositories.UserRepository;
+import io.jsonwebtoken.Jwt;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,15 +19,30 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
 
-    public UserService(UserRepository userRepository,UserMapper userMapper){
+    public UserService(UserRepository userRepository,
+                       UserMapper userMapper,
+                       PasswordEncoder passwordEncoder,JwtService jwtService){
         this.userRepository = userRepository;
         this.userMapper = userMapper;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
     }
 
     public void add(UserRequest userRequest){
         User user = userMapper.requestToUser(userRequest);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         this.userRepository.save(user);
+    }
+
+    public String generateToken(String userName){
+        return  jwtService.generateToken(userName);
+    }
+
+    public void validateToken(String token){
+        jwtService.validateToken(token);
     }
 
     public void update(UserRequest userRequest,UUID id){
@@ -38,7 +55,6 @@ public class UserService {
       userToUpdate.setLastName(userRequest.lastName());
       this.userRepository.save(userToUpdate);
     }
-
 
     public UserResponse getById(UUID id){
         User user = userRepository.findById(id)

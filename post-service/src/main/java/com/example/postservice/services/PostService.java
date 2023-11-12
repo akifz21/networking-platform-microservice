@@ -36,7 +36,7 @@ public class PostService {
                 if (e instanceof FeignException.NotFound){
                     throw new FetchException("User Not Found");
                 }
-                throw new FetchException("An error occurred during fetch");
+                throw new FetchException();
 
             }
     }
@@ -53,7 +53,7 @@ public class PostService {
                 if (e instanceof FeignException.NotFound){
                     throw new FetchException("User Not Found");
                 }
-                throw new FetchException("An error occurred during fetch");
+                throw new FetchException();
             }
     }
 
@@ -65,7 +65,7 @@ public class PostService {
               return postMapper.postToResponse(post, userResponse);
           }).collect(Collectors.toList());
       }catch (FeignException e){
-          throw new FetchException("An error occurred during fetch");
+          throw new FetchException();
       }
     }
 

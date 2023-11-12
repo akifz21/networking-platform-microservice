@@ -4,6 +4,9 @@ import com.akifozdemir.userservice.dtos.UserRequest;
 import com.akifozdemir.userservice.dtos.UserResponse;
 import com.akifozdemir.userservice.services.UserService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,8 +16,10 @@ import java.util.UUID;
 @RequestMapping("/users")
 public class UserController {
     private final UserService userService;
-    public UserController(UserService userService){
+    private final AuthenticationManager authenticationManager;
+    public UserController(UserService userService,AuthenticationManager authenticationManager){
         this.userService = userService;
+        this.authenticationManager = authenticationManager;
     }
     @GetMapping("/{id}")
     public ResponseEntity<UserResponse> getById(@PathVariable UUID id){
@@ -26,10 +31,20 @@ public class UserController {
         return ResponseEntity.ok().body(this.userService.getAll());
     }
 
-    @PostMapping
-    public ResponseEntity<String> add(@RequestBody UserRequest userRequest){
+    @PostMapping("/register")
+    public ResponseEntity<String> register(@RequestBody UserRequest userRequest){
         this.userService.add(userRequest);
         return ResponseEntity.ok().body("User Added "+userRequest.toString());
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody UserRequest userRequest){
+        Authentication authentication = authenticationManager
+                .authenticate(new UsernamePasswordAuthenticationToken(userRequest.email(),userRequest.password()));
+        if (authentication.isAuthenticated()){
+            return ResponseEntity.ok().body(this.userService.generateToken(userRequest.email()));
+        }
+        throw new RuntimeException("Invalid access");
     }
 
     @PutMapping("/{id}")
