@@ -1,5 +1,6 @@
 package com.akifozdemir.userservice.services;
 
+import com.akifozdemir.userservice.dtos.LoginRequest;
 import com.akifozdemir.userservice.dtos.UserRequest;
 import com.akifozdemir.userservice.dtos.UserResponse;
 import com.akifozdemir.userservice.exceptions.UserNotFoundException;
@@ -37,23 +38,10 @@ public class UserService {
         this.userRepository.save(user);
     }
 
-    public String generateToken(String userName){
-        return  jwtService.generateToken(userName);
-    }
-
-    public void validateToken(String token){
-        jwtService.validateToken(token);
-    }
-
-    public void update(UserRequest userRequest,UUID id){
-      User userToUpdate = this.userRepository.findById(id)
-             .orElseThrow(()->new UserNotFoundException("User not found!"));
-      userToUpdate.setDescription(userRequest.description());
-      userToUpdate.setEmail(userRequest.email());
-      userToUpdate.setPassword(userRequest.password());
-      userToUpdate.setFirstName(userRequest.firstName());
-      userToUpdate.setLastName(userRequest.lastName());
-      this.userRepository.save(userToUpdate);
+    public String generateToken(LoginRequest loginRequest){
+        User user = this.userRepository.findByEmail(loginRequest.email())
+                .orElseThrow(()->new UserNotFoundException());
+        return jwtService.generateToken(user);
     }
 
     public UserResponse getById(UUID id){

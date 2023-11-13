@@ -1,5 +1,8 @@
 package com.akifozdemir.userservice.services;
 
+import com.akifozdemir.userservice.dtos.LoginRequest;
+import com.akifozdemir.userservice.dtos.UserPayload;
+import com.akifozdemir.userservice.models.User;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -25,16 +28,18 @@ public class JwtService {
         Jwts.parserBuilder().setSigningKey(getSigningKey()).build().parseClaimsJws(token);
     }
 
-    public String generateToken(String userName) {
+    public String generateToken(User user) {
         Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, userName);
+        UserPayload userPayload = new UserPayload(user.getId(), user.getEmail(),
+                user.getFirstName()+" "+user.getLastName());
+        claims.put("user",userPayload);
+        return createToken(claims);
     }
 
-    private String createToken(Map<String, Object> claims, String userName) {
+    private String createToken(Map<String, Object> claims) {
         long expirationTimeInMs = 1000 * 60 * 30;
         return Jwts.builder()
                 .setClaims(claims)
-                .setSubject(userName)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + expirationTimeInMs))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)

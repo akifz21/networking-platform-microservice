@@ -1,5 +1,6 @@
 package com.akifozdemir.userservice.controllers;
 
+import com.akifozdemir.userservice.dtos.LoginRequest;
 import com.akifozdemir.userservice.dtos.UserRequest;
 import com.akifozdemir.userservice.dtos.UserResponse;
 import com.akifozdemir.userservice.services.UserService;
@@ -38,24 +39,14 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody UserRequest userRequest){
+    public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest){
         Authentication authentication = authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(userRequest.email(),userRequest.password()));
+                .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.email(),loginRequest.password()));
         if (authentication.isAuthenticated()){
-            return ResponseEntity.ok().body(this.userService.generateToken(userRequest.email()));
+            return ResponseEntity.ok().body(this.userService.generateToken(loginRequest));
         }
         throw new RuntimeException("Invalid access");
     }
-    @PostMapping("/token/{token}")
-    public String validate(@PathVariable String token){
-        userService.validateToken(token);
-        return "Validate";
-    }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<String> update(@RequestBody UserRequest userRequest,@PathVariable UUID id){
-        this.userService.update(userRequest,id);
-        return ResponseEntity.ok().body("User Updated");
-    }
 
 }
