@@ -11,9 +11,8 @@
         <module name="config-server" />
         <module name="discovery-server" />
         <module name="user-service" />
-        <module name="company-service" />
       </profile>
-      <profile name="Annotation profile for post-service" enabled="true">
+      <profile name="Annotation profile for company-service" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
@@ -24,13 +23,14 @@
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok-mapstruct-binding/0.2.0/lombok-mapstruct-binding-0.2.0.jar" />
         </processorPath>
         <module name="post-service" />
+        <module name="company-service" />
       </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="api-gateway" options="-parameters" />
-      <module name="company-service" options="-parameters" />
+      <module name="company-service" options="-parameters -Amapstruct.defaultComponentModel=spring" />
       <module name="config-server" options="-parameters" />
       <module name="discovery-server" options="-parameters" />
       <module name="post-service" options="-parameters -Amapstruct.defaultComponentModel=spring" />

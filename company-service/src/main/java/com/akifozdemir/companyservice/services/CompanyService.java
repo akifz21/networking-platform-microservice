@@ -1,0 +1,68 @@
+package com.akifozdemir.companyservice.services;
+
+import com.akifozdemir.companyservice.client.UserClient;
+import com.akifozdemir.companyservice.dtos.CompanyRequest;
+import com.akifozdemir.companyservice.dtos.CompanyResponse;
+import com.akifozdemir.companyservice.dtos.UserResponse;
+import com.akifozdemir.companyservice.exceptions.CompanyNotFoundException;
+import com.akifozdemir.companyservice.exceptions.FetchException;
+import com.akifozdemir.companyservice.mappers.CompanyMapper;
+import com.akifozdemir.companyservice.models.Company;
+import com.akifozdemir.companyservice.repositories.CompanyRepository;
+import feign.FeignException;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+
+@Service
+public class CompanyService {
+    private final CompanyRepository companyRepository;
+    private final CompanyMapper companyMapper;
+    private final UserClient userClient;
+    public CompanyService(CompanyRepository companyRepository,
+                          CompanyMapper companyMapper,UserClient userClient){
+        this.companyRepository = companyRepository;
+        this.companyMapper = companyMapper;
+        this.userClient = userClient;
+    }
+    public void add(CompanyRequest companyRequest){
+        Company company = this.companyMapper.requestToComponent(companyRequest);
+        this.companyRepository.save(company);
+    }
+
+    public CompanyResponse getById(UUID id){
+        Company company = this.companyRepository.findById(id).
+                orElseThrow(()-> new CompanyNotFoundException());
+        UserResponse userResponse = userClient.getUserById(company.getOwnerId());
+        return this.companyMapper.companyToResponse(company,userResponse);
+    }
+
+    public List<CompanyResponse> getAll(){
+        try {
+            List<Company> companyList = this.companyRepository.findAll();
+            return companyList.stream().map(company -> {
+                UserResponse userResponse = userClient.getUserById(company.getOwnerId());
+                return this.companyMapper.companyToResponse(company,userResponse);
+            }).collect(Collectors.toList());
+        }catch (FeignException e){
+            throw new FetchException();
+        }
+    }
+
+    public List<CompanyResponse> getAllByOwner(UUID ownerId){
+        try {
+            List<Company> companyList = this.companyRepository.findByOwnerId(ownerId);
+            return companyList.stream().map(company -> {
+                UserResponse userResponse = userClient.getUserById(company.getOwnerId());
+                return this.companyMapper.companyToResponse(company,userResponse);
+            }).collect(Collectors.toList());
+        }catch (FeignException e){
+            throw new FetchException();
+        }
+    }
+
+
+}
