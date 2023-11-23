@@ -15,6 +15,18 @@ spring:
     gateway:
       default-filters:
         - AuthenticationFilter
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "http://localhost:3000"
+            allowedHeaders:
+              - "*"
+            allowedMethods:
+              - GET
+              - POST
+              - DELETE
+              - PUT
+              - OPTIONS
       discovery:
         locator:
           enabled: true
