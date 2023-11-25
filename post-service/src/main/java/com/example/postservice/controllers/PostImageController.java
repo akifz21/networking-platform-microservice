@@ -21,12 +21,6 @@ public class PostImageController {
         this.postImageService = postImageService;
     }
 
-    @PostMapping("/upload")
-    public ResponseEntity<PostImageResponse> upload(@RequestParam("image") MultipartFile file,
-                                                    @RequestParam UUID postId) throws IOException {
-        PostImageResponse postImageResponse = postImageService.upload(file,postId);
-        return new ResponseEntity<>(postImageResponse, HttpStatus.OK);
-    }
 
     @GetMapping("/download/{id}")
     public ResponseEntity<?> download(@PathVariable UUID id){

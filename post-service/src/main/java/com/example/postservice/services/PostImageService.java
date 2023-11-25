@@ -1,7 +1,6 @@
 package com.example.postservice.services;
 
-import com.example.postservice.dtos.respones.PostImageResponse;
-import com.example.postservice.mappers.PostImageMapper;
+import com.example.postservice.models.Post;
 import com.example.postservice.models.PostImage;
 import com.example.postservice.repositories.PostImageRepository;
 import com.example.postservice.utils.ImageUtil;
@@ -18,24 +17,18 @@ import java.util.stream.Collectors;
 public class PostImageService {
 
     private final PostImageRepository postImageRepository;
-    private final PostService postService;
-    private final PostImageMapper postImageMapper;
 
-    public PostImageService(
-            PostImageRepository postImageRepository,PostService postService,PostImageMapper postImageMapper){
+    public PostImageService(PostImageRepository postImageRepository){
         this.postImageRepository = postImageRepository;
-        this.postService = postService;
-        this.postImageMapper = postImageMapper;
     }
 
-    public PostImageResponse upload(MultipartFile file, UUID postId) throws IOException {
+    public void upload(MultipartFile file, Post post) throws IOException {
         PostImage postImage = new PostImage();
         postImage.setName(file.getOriginalFilename());
         postImage.setType(file.getContentType());
         postImage.setData(ImageUtil.compressImage(file.getBytes()));
-        postImage.setPost(postService.getById(postId));
+        postImage.setPost(post);
         postImageRepository.save(postImage);
-        return postImageMapper.imageToResponse(postImage);
     }
 
     public byte[] download(UUID id){

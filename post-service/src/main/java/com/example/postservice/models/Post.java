@@ -12,7 +12,6 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     private UUID userId;
-    private String title;
     private String description;
 
     @OneToMany(mappedBy = "post")

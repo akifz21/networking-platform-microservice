@@ -10,6 +10,8 @@ import com.example.postservice.models.Post;
 import com.example.postservice.repositories.PostRepository;
 import feign.FeignException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.UUID;
@@ -20,24 +22,33 @@ public class PostService {
     private final PostRepository postRepository;
     private final PostMapper postMapper;
     private final UserClient userClient;
+    private final PostImageService postImageService;
 
-    public PostService(PostRepository postRepository,PostMapper postMapper,UserClient userClient){
+    public PostService(PostRepository postRepository,
+                       PostMapper postMapper,
+                       UserClient userClient,PostImageService postImageService){
         this.postRepository = postRepository;
         this.postMapper = postMapper;
         this.userClient = userClient;
+        this.postImageService = postImageService;
     }
 
-    public void add(PostRequest postRequest){
+    @Transactional
+    public void add(PostRequest postRequest,MultipartFile[] files){
             try {
                 UserResponse userResponse = userClient.getUserById(postRequest.userId());
                 Post post = this.postMapper.requestToPost(postRequest);
-                this.postRepository.save(post);
-            }catch (FeignException e){
+                Post addedPost =  this.postRepository.save(post);
+                if (files != null) {
+                    for (MultipartFile file : files) {
+                        if (!file.isEmpty()) this.postImageService.upload(file, addedPost);
+                    }
+                }
+            }catch (Exception e){
                 if (e instanceof FeignException.NotFound){
                     throw new FetchException("User Not Found");
                 }
-                throw new FetchException(e.getMessage());
-
+                throw new RuntimeException(e.getMessage());
             }
     }
 

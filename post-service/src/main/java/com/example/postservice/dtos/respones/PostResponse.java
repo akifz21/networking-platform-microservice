@@ -6,5 +6,5 @@ public record PostResponse(
         UUID id,
         UUID userId,
         String userFirstName,String userLastName,
-        String title,String description
+        String description
 ) {}
