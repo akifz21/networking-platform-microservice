@@ -33,8 +33,8 @@ public class PostImageController {
     }
 
     @GetMapping("/{postId}/images")
-    public ResponseEntity<List<byte[]>> getAllImagesByPostId(@PathVariable UUID postId) {
-        List<byte[]> images = postImageService.downloadAllImagesByPostId(postId);
+    public ResponseEntity<List<PostImageResponse>> getAllImagesByPostId(@PathVariable UUID postId) {
+        List<PostImageResponse> images = postImageService.downloadAllImagesByPostId(postId);
         return ResponseEntity.ok(images);
 
     }

@@ -1,5 +1,6 @@
 package com.example.postservice.services;
 
+import com.example.postservice.dtos.respones.PostImageResponse;
 import com.example.postservice.models.Post;
 import com.example.postservice.models.PostImage;
 import com.example.postservice.repositories.PostImageRepository;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -39,10 +41,11 @@ public class PostImageService {
         return null;
     }
 
-    public List<byte[]> downloadAllImagesByPostId(UUID postId) {
+    public List<PostImageResponse> downloadAllImagesByPostId(UUID postId) {
         List<PostImage> postImages = postImageRepository.findAllPostImageByPost_Id(postId);
-        return postImages.stream()
-                .map(postImage -> ImageUtil.decompressImage(postImage.getData()))
+        return postImages.stream().map(image -> new PostImageResponse(
+                image.getId(),image.getPost().getId(),image.getName(),
+                image.getType()))
                 .collect(Collectors.toList());
     }
 }
