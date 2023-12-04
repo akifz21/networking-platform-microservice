@@ -70,7 +70,7 @@ public class PostService {
 
     public List<PostResponse> getAllPostsWithUserDetails() {
       try {
-          List<Post> posts = this.postRepository.findAll();
+          List<Post> posts = this.postRepository.findAllByOrderByCreatedDateDesc();
           return posts.stream().map(post -> {
               UserResponse userResponse = userClient.getUserById(post.getUserId());
               return postMapper.postToResponse(post, userResponse);
