@@ -51,6 +51,12 @@ public class UserService {
         return userMapper.userToResponse(user);
     }
 
+    public List<UserResponse> getByIds(List<UUID> ids){
+        List<User> users = userRepository.findAllByIdIn(ids);
+        return users.stream().map(user ->
+                this.userMapper.userToResponse(user)).collect(Collectors.toList());
+    }
+
     public List<UserResponse> getAll(){
         List<User> users = this.userRepository.findAll();
         return users.stream()

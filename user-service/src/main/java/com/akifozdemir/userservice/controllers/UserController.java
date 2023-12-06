@@ -32,6 +32,11 @@ public class UserController {
         return ResponseEntity.ok().body(this.userService.getAll());
     }
 
+    @GetMapping("/ids")
+    public ResponseEntity<List<UserResponse>> getUsersByIds(@RequestParam List<UUID> ids){
+        return ResponseEntity.ok().body(this.userService.getByIds(ids));
+    }
+
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody UserRequest userRequest){
         this.userService.add(userRequest);
