@@ -14,7 +14,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -71,8 +73,16 @@ public class PostService {
     public List<PostResponse> getAllPostsWithUserDetails() {
       try {
           List<Post> posts = this.postRepository.findAllByOrderByCreatedDateDesc();
+          List<UUID> userIds = posts.stream()
+                  .map(Post::getUserId)
+                  .distinct()
+                  .collect(Collectors.toList());
+          Map<UUID, UserResponse> userMap = userClient.getUsersByIds(userIds)
+                  .stream()
+                  .collect(Collectors.toMap(UserResponse::getId, Function.identity()));
+
           return posts.stream().map(post -> {
-              UserResponse userResponse = userClient.getUserById(post.getUserId());
+              UserResponse userResponse = userMap.get(post.getUserId());
               return postMapper.postToResponse(post, userResponse);
           }).collect(Collectors.toList());
       }catch (FeignException e){
