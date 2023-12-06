@@ -12,7 +12,9 @@ import feign.FeignException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,18 +35,27 @@ public class CommentService {
         Comment comment = this.commentMapper.addRequestToComment(commentAddRequest);
         this.commentRepository.save(comment);
     }
-    public List<CommentResponse> getAll(){
-        List<Comment> comments = this.commentRepository.findAll();
-        return comments.stream()
-                .map(comment -> this.commentMapper.commentToResponse(comment))
-                .collect(Collectors.toList());
-    }
-
     public List<CommentResponse> getByPost(UUID postId){
-        List<Comment> comments = this.commentRepository.findByPost_Id(postId);
-        return comments.stream()
-                .map(comment -> this.commentMapper.commentToResponse(comment))
-                .collect(Collectors.toList());
+       try{
+           List<Comment> comments = this.commentRepository.findByPost_Id(postId);
+           List<UUID> userIds = comments.stream().
+                   map(Comment::getUserId)
+                   .distinct()
+                   .collect(Collectors.toList());
+
+           Map<UUID,UserResponse> users = this.userClient.getUsersByIds(userIds)
+                   .stream()
+                   .collect(Collectors.toMap(UserResponse::getId, Function.identity()));
+
+          return comments.stream().map(comment -> {
+              UserResponse userResponse = users.get(comment.getUserId());
+              return this.commentMapper.commentToResponse(comment,userResponse);
+          }).collect(Collectors.toList());
+
+       }catch (FeignException e){
+           if (e instanceof FeignException.NotFound) throw new FetchException("User not found");
+           throw new FetchException();
+       }
     }
 
 
@@ -53,13 +64,11 @@ public class CommentService {
           UserResponse userResponse = this.userClient.getUserById(userId);
           List<Comment> comments = this.commentRepository.findByUserId(userId);
           return comments.stream()
-                  .map(comment -> this.commentMapper.commentToResponse(comment))
+                  .map(comment -> this.commentMapper.commentToResponse(comment,userResponse))
                   .collect(Collectors.toList());
       }catch (FeignException e){
             if (e instanceof FeignException.NotFound) throw new FetchException("User not found");
             throw new FetchException();
       }
     }
-
-
 }

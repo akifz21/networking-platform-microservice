@@ -85,6 +85,7 @@ public class PostService {
               UserResponse userResponse = userMap.get(post.getUserId());
               return postMapper.postToResponse(post, userResponse);
           }).collect(Collectors.toList());
+
       }catch (FeignException e){
           throw new FetchException(e.getMessage());
       }
