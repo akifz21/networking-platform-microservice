@@ -10,6 +10,7 @@ import com.example.postservice.models.Like;
 import com.example.postservice.repositories.LikeRepository;
 import feign.FeignException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -26,8 +27,13 @@ public class LikeService {
         this.userClient= userClient;
     }
     public void add(LikeRequest likeRequest){
+        boolean isLiked = this.likeRepository.existsByUserIdAndPostId(likeRequest.userId(),likeRequest.postId());
         Like like = this.likeMapper.requestToLike(likeRequest);
-        this.likeRepository.save(like);
+        if (isLiked == false) this.likeRepository.save(like);
+    }
+
+    public void delete(UUID postId,UUID userId){
+        this.likeRepository.deleteByPost_IdAndUserId(postId,userId);
     }
 
     public List<LikeResponse> getAll(){
@@ -42,6 +48,25 @@ public class LikeService {
         return likes.stream()
                 .map(like -> this.likeMapper.likeToResponse(like))
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void toggleLike(LikeRequest likeRequest){
+        boolean isLiked = this.likeRepository.existsByUserIdAndPostId(likeRequest.userId(),likeRequest.postId());
+        Like like = this.likeMapper.requestToLike(likeRequest);
+        if (isLiked == false){
+            this.likeRepository.save(like);
+        }else{
+            this.likeRepository.deleteByPost_IdAndUserId(likeRequest.postId(),likeRequest.userId());
+        }
+    }
+
+    public long getCountByPost(UUID postId){
+        return this.likeRepository.countByPost_Id(postId);
+    }
+
+    public boolean hasUserLikedPost(UUID userId,UUID postId){
+        return this.likeRepository.existsByUserIdAndPostId(userId,postId);
     }
 
     public List<LikeResponse> getByUser(UUID userId){

@@ -19,9 +19,21 @@ public class LikeController {
         this.likeService = likeService;
     }
     @PostMapping
-    public ResponseEntity<String> add(LikeRequest likeRequest){
+    public ResponseEntity<String> add(@RequestBody LikeRequest likeRequest){
         this.likeService.add(likeRequest);
         return new ResponseEntity<>("Like Added", HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<String> delete(@RequestParam UUID postId,@RequestParam UUID userId){
+        this.likeService.delete(postId,userId);
+        return ResponseEntity.ok().body("Deleted");
+    }
+
+    @PostMapping("/toggle")
+    public ResponseEntity<String> toggle(@RequestBody LikeRequest likeRequest){
+        this.likeService.toggleLike(likeRequest);
+        return ResponseEntity.ok().body("Successfully");
     }
 
     @GetMapping("/post/{postId}")
@@ -33,6 +45,17 @@ public class LikeController {
     public ResponseEntity<List<LikeResponse>> getByUser(@PathVariable UUID userId){
         return ResponseEntity.ok().body(this.likeService.getByUser(userId));
     }
+
+    @GetMapping("/count/{postId}")
+    public ResponseEntity<Long> getLikeCountByPost(@PathVariable UUID postId){
+        return ResponseEntity.ok().body(this.likeService.getCountByPost(postId));
+    }
+
+    @GetMapping("/check")
+    public ResponseEntity<Boolean> checkIfUserLikedPost(@RequestParam UUID userId,@RequestParam UUID postId){
+        return ResponseEntity.ok().body(this.likeService.hasUserLikedPost(userId,postId));
+    }
+
     @GetMapping
     public ResponseEntity<List<LikeResponse>> getAll(){
         return new ResponseEntity<>(this.likeService.getAll(), HttpStatus.OK);
