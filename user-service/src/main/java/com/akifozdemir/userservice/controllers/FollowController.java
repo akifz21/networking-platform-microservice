@@ -1,10 +1,13 @@
 package com.akifozdemir.userservice.controllers;
 
-import com.akifozdemir.userservice.dtos.FollowRequest;
+import com.akifozdemir.userservice.dtos.UserResponse;
+import com.akifozdemir.userservice.dtos.follow.FollowRequest;
+import com.akifozdemir.userservice.dtos.follow.FollowResponse;
 import com.akifozdemir.userservice.services.FollowService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -25,6 +28,17 @@ public class FollowController {
     public ResponseEntity<String> unfollow(@RequestBody FollowRequest followRequest){
         this.followService.unfollow(followRequest);
         return ResponseEntity.ok().body("User has unfollowed");
+    }
+
+    @GetMapping("/followers/{userId}")
+    public ResponseEntity<List<UserResponse>> userFollowers(@PathVariable UUID userId){
+        return ResponseEntity.ok().body(this.followService.getUserFollowers(userId));
+    }
+
+
+    @GetMapping("/following/{userId}")
+    public ResponseEntity<List<UserResponse>> userFollowing(@PathVariable UUID userId){
+        return ResponseEntity.ok().body(this.followService.getUserFollowing(userId));
     }
 
     @GetMapping("/check")

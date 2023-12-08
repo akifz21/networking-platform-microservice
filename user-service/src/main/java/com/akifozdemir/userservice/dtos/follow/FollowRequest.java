@@ -1,4 +1,4 @@
-package com.akifozdemir.userservice.dtos;
+package com.akifozdemir.userservice.dtos.follow;
 
 
 import java.util.UUID;

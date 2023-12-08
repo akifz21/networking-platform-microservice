@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface PostRepository extends JpaRepository<Post, UUID> {
-    List<Post> findByUserId(UUID userId);
+    List<Post> findByUserIdOrderByCreatedDateDesc(UUID userId);
 
     List<Post> findAllByOrderByCreatedDateDesc();
 }

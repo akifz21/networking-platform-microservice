@@ -57,7 +57,7 @@ public class PostService {
     public List<PostResponse> getByUser(UUID userId){
             try {
                 UserResponse userResponse = userClient.getUserById(userId);
-                List<Post> posts = this.postRepository.findByUserId(userId);
+                List<Post> posts = this.postRepository.findByUserIdOrderByCreatedDateDesc(userId);
                 return posts
                         .stream()
                         .map(post -> this.postMapper.postToResponse(post,userResponse))
