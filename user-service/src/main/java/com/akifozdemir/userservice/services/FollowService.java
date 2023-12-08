@@ -5,6 +5,7 @@ import com.akifozdemir.userservice.mappers.FollowMapper;
 import com.akifozdemir.userservice.models.Follow;
 import com.akifozdemir.userservice.repositories.FollowRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -30,6 +31,7 @@ public class FollowService {
         return this.followRepository.existsByUser_IdAndFollowing_Id(userId,followingId);
     }
 
+    @Transactional
     public String toggle(FollowRequest followRequest){
         if (isFollowing(followRequest.userId(),followRequest.followingId())==false){
             follow(followRequest);
