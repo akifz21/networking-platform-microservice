@@ -12,6 +12,8 @@ import com.akifozdemir.companyservice.repositories.CompanyRepository;
 import feign.FeignException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -30,6 +32,14 @@ public class CompanyService {
     }
     public void add(CompanyRequest companyRequest){
         Company company = this.companyMapper.requestToComponent(companyRequest);
+        company.setWorkers(new ArrayList<>());
+        this.companyRepository.save(company);
+    }
+
+    public void updateWorkers(UUID companyId, List<UUID> workerIds) {
+        Company company = this.companyRepository.findById(companyId)
+                .orElseThrow(() -> new RuntimeException("Company not found."));
+        company.addWorkers(workerIds);
         this.companyRepository.save(company);
     }
 

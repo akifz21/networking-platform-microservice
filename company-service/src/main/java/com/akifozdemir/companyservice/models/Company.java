@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -23,5 +25,12 @@ public class Company {
     private String description;
     private UUID ownerId;
 
-    private Set<UUID> workers;
+    private List<UUID> workers;
+
+    public void addWorkers(List<UUID> newWorkers) {
+        if (this.workers == null) {
+            this.workers = new ArrayList<>();
+        }
+        this.workers.addAll(newWorkers);
+    }
 }

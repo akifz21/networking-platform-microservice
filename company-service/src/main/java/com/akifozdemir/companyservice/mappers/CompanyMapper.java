@@ -12,7 +12,7 @@ import org.mapstruct.Mappings;
 public interface CompanyMapper {
     Company requestToComponent(CompanyRequest companyRequest);
     @Mappings({
-            @Mapping(source = "user.id", target = "userId"),
+            @Mapping(source = "user.id", target = "ownerId"),
             @Mapping(source = "company.id",target = "id"),
             @Mapping(source = "user.firstName",target = "ownerFirstName"),
             @Mapping(source = "user.lastName",target = "ownerLastName")

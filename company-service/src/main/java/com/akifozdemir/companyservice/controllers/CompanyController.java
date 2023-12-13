@@ -4,23 +4,20 @@ import com.akifozdemir.companyservice.dtos.CompanyRequest;
 import com.akifozdemir.companyservice.dtos.CompanyResponse;
 import com.akifozdemir.companyservice.services.CompanyService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/companies")
+@RequestMapping("/")
 public class CompanyController {
     private final CompanyService companyService;
     public CompanyController(CompanyService companyService){
         this.companyService = companyService;
     }
     @PostMapping
-    public ResponseEntity<String> add(CompanyRequest companyRequest){
+    public ResponseEntity<String> add(@RequestBody CompanyRequest companyRequest){
         this.companyService.add(companyRequest);
         return ResponseEntity.ok().body("Company added");
     }
@@ -32,17 +29,13 @@ public class CompanyController {
     }
 
     @GetMapping("/owner/{ownerId}")
-    public ResponseEntity<List<CompanyResponse>> getAllByOwner(UUID ownerId){
+    public ResponseEntity<List<CompanyResponse>> getAllByOwner(@PathVariable UUID ownerId){
         List<CompanyResponse> companyResponses = this.companyService.getAllByOwner(ownerId);
         return ResponseEntity.ok().body(companyResponses);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CompanyResponse> getById(UUID id){
+    public ResponseEntity<CompanyResponse> getById(@PathVariable UUID id){
         return ResponseEntity.ok().body(this.companyService.getById(id));
     }
-
-
-
-
 }
