@@ -6,6 +6,7 @@ import com.akifozdemir.companyservice.services.CompanyService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.annotation.Repeatable;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,6 +21,11 @@ public class CompanyController {
     public ResponseEntity<String> add(@RequestBody CompanyRequest companyRequest){
         this.companyService.add(companyRequest);
         return ResponseEntity.ok().body("Company added");
+    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> delete(@PathVariable UUID id){
+        this.companyService.delete(id);
+        return ResponseEntity.ok().body("Company deleted");
     }
 
     @GetMapping

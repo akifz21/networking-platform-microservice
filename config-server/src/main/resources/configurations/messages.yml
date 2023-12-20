@@ -1,0 +1,19 @@
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+  registration:
+    enabled: true
+    preferIpAddress: true
+
+server:
+  port: 8100
+
+spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/microservices-messages
+  application:
+    name: messages

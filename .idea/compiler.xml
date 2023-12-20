@@ -11,6 +11,7 @@
         <module name="config-server" />
         <module name="discovery-server" />
         <module name="user-service" />
+        <module name="message-service" />
       </profile>
       <profile name="Annotation profile for post-service" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
@@ -35,6 +36,7 @@
       <module name="config-server" options="-parameters" />
       <module name="discovery-server" options="-parameters" />
       <module name="job-service" options="-parameters -Amapstruct.defaultComponentModel=spring" />
+      <module name="message-service" options="-parameters" />
       <module name="post-service" options="-parameters -Amapstruct.defaultComponentModel=spring" />
       <module name="user-service" options="-parameters" />
     </option>

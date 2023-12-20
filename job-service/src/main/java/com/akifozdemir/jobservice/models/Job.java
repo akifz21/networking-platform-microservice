@@ -23,5 +23,4 @@ public class Job {
 
     @OneToMany(mappedBy = "job")
     private Set<JobApplication> applications;
-
 }

@@ -36,6 +36,11 @@ public class CompanyService {
         this.companyRepository.save(company);
     }
 
+    public void delete(UUID id){
+        this.companyRepository.deleteById(id);
+
+    }
+
     public void updateWorkers(UUID companyId, List<UUID> workerIds) {
         Company company = this.companyRepository.findById(companyId)
                 .orElseThrow(() -> new RuntimeException("Company not found."));
