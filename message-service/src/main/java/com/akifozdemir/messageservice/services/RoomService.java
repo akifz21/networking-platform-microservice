@@ -19,8 +19,13 @@ public class RoomService {
     public Room addRoom(RoomRequest roomRequest){
         Optional<Room> existedRoom = this.roomRepository
                 .findBySenderUserIdAndReceiverUserId(roomRequest.senderUserId(),roomRequest.receiverUserId());
+        Optional<Room> existedRoom2 = this.roomRepository
+                .findBySenderUserIdAndReceiverUserId(roomRequest.receiverUserId(),roomRequest.senderUserId());
         if (existedRoom.isPresent()){
             return existedRoom.get();
+        }
+        if (existedRoom2.isPresent()){
+            return existedRoom2.get();
         }
         Room room = new Room();
         room.setSenderUserId(roomRequest.senderUserId());

@@ -15,5 +15,5 @@ public class Message {
     @Id
     private String id;
     private String message;
-    private int roomId;
+    private String roomId;
 }
