@@ -1,5 +1,6 @@
 package com.akifozdemir.messageservice.services;
 
+import com.akifozdemir.messageservice.dtos.ChatMessage;
 import com.akifozdemir.messageservice.models.Message;
 import com.akifozdemir.messageservice.repositories.MessageRepository;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,6 @@ public class MessageService {
     }
 
     public List<Message> getMessagesByRoom(String roomId){
-       return this.messageRepository.findByRoomId(roomId);
+        return this.messageRepository.findByRoomId(roomId);
     }
 }

@@ -18,11 +18,9 @@ public class SocketController {
     }
     @MessageMapping("/message/{roomId}")
     @SendTo("/topic/messages/{roomId}")
-    public ChatMessage processMessage(@DestinationVariable String roomId, @Payload  ChatMessage message) {
-        Message messageToSave = new Message();
-        messageToSave.setMessage(message.getContent());
-        messageToSave.setRoomId(roomId);
-        this.messageService.saveMessage(messageToSave);
+    public Message processMessage(@DestinationVariable String roomId, @Payload  Message message) {
+        message.setRoomId(roomId);
+        this.messageService.saveMessage(message);
         return message;
     }
 }
