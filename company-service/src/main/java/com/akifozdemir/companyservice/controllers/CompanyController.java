@@ -3,6 +3,8 @@ package com.akifozdemir.companyservice.controllers;
 import com.akifozdemir.companyservice.dtos.CompanyRequest;
 import com.akifozdemir.companyservice.dtos.CompanyResponse;
 import com.akifozdemir.companyservice.services.CompanyService;
+import feign.Response;
+import lombok.ToString;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +23,12 @@ public class CompanyController {
     public ResponseEntity<String> add(@RequestBody CompanyRequest companyRequest){
         this.companyService.add(companyRequest);
         return ResponseEntity.ok().body("Company added");
+    }
+
+    @PutMapping("/workers/{companyId}")
+    public ResponseEntity<String> updateWorkers(@PathVariable UUID companyId,@RequestBody List<UUID> workers){
+        this.companyService.updateWorkers(companyId,workers);
+        return ResponseEntity.ok().body("Workers updated");
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable UUID id){

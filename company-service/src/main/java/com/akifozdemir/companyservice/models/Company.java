@@ -23,6 +23,10 @@ public class Company {
     private UUID id;
     private String name;
     private String description;
+    private String address;
+    private String phoneNumber;
+    private String email;
+    private String website;
     private UUID ownerId;
 
     private List<UUID> workers;
