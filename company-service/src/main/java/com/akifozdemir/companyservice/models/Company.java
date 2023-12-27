@@ -24,7 +24,6 @@ public class Company {
     private String name;
     private String description;
     private String address;
-    private String phoneNumber;
     private String email;
     private String website;
     private UUID ownerId;

@@ -16,11 +16,11 @@ import java.util.UUID;
 @Entity
 public class JobApplication {
     @Id
-    private UUID id;
-    private UUID userId;
+        private UUID id;
+        private UUID userId;
 
-    @ManyToOne
-    @JoinColumn(name = "job_id")
-    private Job job;
+        @ManyToOne
+        @JoinColumn(name = "job_id")
+        private Job job;
 
 }
