@@ -7,7 +7,9 @@ import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
@@ -16,10 +18,13 @@ import java.util.UUID;
 @Entity
 public class JobApplication {
     @Id
-        private UUID id;
-        private UUID userId;
+    private UUID id;
+    private UUID userId;
 
-        @ManyToOne
+    @CreatedDate
+    private LocalDateTime createdDate;
+
+    @ManyToOne
         @JoinColumn(name = "job_id")
         private Job job;
 

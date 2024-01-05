@@ -1,9 +1,7 @@
 package com.akifozdemir.jobservice.services;
 
-import com.akifozdemir.jobservice.JobServiceApplication;
 import com.akifozdemir.jobservice.dtos.JobApplicationRequest;
 import com.akifozdemir.jobservice.dtos.JobApplicationResponse;
-import com.akifozdemir.jobservice.dtos.JobResponse;
 import com.akifozdemir.jobservice.mappers.JobApplicationMapper;
 import com.akifozdemir.jobservice.models.JobApplication;
 import com.akifozdemir.jobservice.repositories.JobApplicationRepository;
@@ -11,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class JobApplicationService {
@@ -36,4 +35,24 @@ public class JobApplicationService {
                         .orElseThrow(()->new RuntimeException("Job Application not found."));
         return this.jobApplicationMapper.jobApplicationToResponse(jobApplication);
     }
+
+    public List<JobApplicationResponse> getByJob(UUID jobId){
+        List<JobApplication> jobApplications =
+                this.jobApplicationRepository.findByJob_Id(jobId);
+        return jobApplications
+                .stream()
+                .map(jobApplication -> this.jobApplicationMapper.jobApplicationToResponse(jobApplication))
+                .collect(Collectors.toList());
+    }
+
+    public List<JobApplicationResponse> getByUser(UUID userId){
+        List<JobApplication> jobApplications =
+                this.jobApplicationRepository.findByUserId(userId);
+        return jobApplications
+                .stream()
+                .map(jobApplication -> this.jobApplicationMapper.jobApplicationToResponse(jobApplication))
+                .collect(Collectors.toList());
+
+    }
+
 }
