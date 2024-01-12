@@ -12,7 +12,7 @@ import org.mapstruct.Mappings;
 public interface JobMapper {
     Job requestToJob(JobRequest jobRequest);
     @Mappings({
-            @Mapping(target = "id",source = "job.id"),
+            @Mapping(target = "id",source = "   job.id"),
             @Mapping(target = "companyName",source = "companyResponse.name"),
             @Mapping(target = "companyId",source = "companyResponse.id")
     })

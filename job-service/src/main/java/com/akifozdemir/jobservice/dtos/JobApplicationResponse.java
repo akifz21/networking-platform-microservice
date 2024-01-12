@@ -11,5 +11,9 @@ public record JobApplicationResponse(
         UUID id,
         UUID userId,
         UUID jobId,
-        LocalDateTime createdDate
+        LocalDateTime createdDate,
+        String jobName,
+        String userFirstName,
+        String userLastName
+
 ) { }
