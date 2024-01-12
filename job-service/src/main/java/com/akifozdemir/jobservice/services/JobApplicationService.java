@@ -29,6 +29,10 @@ public class JobApplicationService {
         this.jobApplicationRepository.save(jobApplication);
     }
 
+    public void delete(UUID id){
+        this.jobApplicationRepository.deleteById(id);
+    }
+
     public JobApplicationResponse getById(UUID id){
         JobApplication jobApplication =
                 this.jobApplicationRepository.findById(id)
