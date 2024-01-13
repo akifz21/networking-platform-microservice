@@ -12,8 +12,8 @@ import org.mapstruct.Mappings;
 public interface JobApplicationMapper {
 
     @Mappings({
-            @Mapping(target = "id",source = "id"),
             @Mapping(target = "job.id",source = "jobId"),
+            @Mapping(target = "userId",source = "userId")
     })
     JobApplication requestToJobApplication(JobApplicationRequest jobApplicationRequest);
 

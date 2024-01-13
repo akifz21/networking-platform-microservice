@@ -17,6 +17,7 @@ import java.util.UUID;
 @EntityListeners(AuditingEntityListener.class)
 public class JobApplication {
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     private UUID userId;
 
@@ -24,7 +25,7 @@ public class JobApplication {
     private LocalDateTime createdDate;
 
     @ManyToOne
-        @JoinColumn(name = "job_id")
-        private Job job;
+    @JoinColumn(name = "job_id")
+    private Job job;
 
 }
