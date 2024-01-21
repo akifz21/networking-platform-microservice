@@ -24,11 +24,12 @@ public class JobApplicationController {
         return ResponseEntity.ok().body("Applied Successfully");
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete(@PathVariable UUID id){
-        this.jobApplicationService.delete(id);
+    @DeleteMapping("/delete")
+    public ResponseEntity<String> delete(@RequestParam UUID userId,@RequestParam UUID jobId){
+        this.jobApplicationService.delete(userId,jobId);
         return ResponseEntity.ok().body("Successfully");
     }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<JobApplicationResponse> getById(@PathVariable UUID id){
@@ -45,5 +46,9 @@ public class JobApplicationController {
         return ResponseEntity.ok().body(this.jobApplicationService.getByJob(id));
     }
 
+    @GetMapping("/check")
+    public ResponseEntity<Boolean> checkIfApplied(@RequestParam UUID userId,@RequestParam UUID jobId){
+        return ResponseEntity.ok().body(this.jobApplicationService.checkIfApplied(userId,jobId));
+    }
 
 }

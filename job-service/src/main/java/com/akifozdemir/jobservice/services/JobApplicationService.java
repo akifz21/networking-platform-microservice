@@ -8,6 +8,7 @@ import com.akifozdemir.jobservice.mappers.JobApplicationMapper;
 import com.akifozdemir.jobservice.models.JobApplication;
 import com.akifozdemir.jobservice.repositories.JobApplicationRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -37,8 +38,9 @@ public class JobApplicationService {
         this.jobApplicationRepository.save(jobApplication);
     }
 
-    public void delete(UUID id){
-        this.jobApplicationRepository.deleteById(id);
+    @Transactional
+    public void delete(UUID userId,UUID jobId){
+        this.jobApplicationRepository.deleteByUserIdAndJob_Id(userId,jobId);
     }
 
     public JobApplicationResponse getById(UUID id){
@@ -80,5 +82,10 @@ public class JobApplicationService {
        }
 
     }
+
+    public boolean checkIfApplied(UUID userId, UUID jobId){
+        return this.jobApplicationRepository.existsByUserIdAndJob_Id(userId,jobId);
+    }
+
 
 }

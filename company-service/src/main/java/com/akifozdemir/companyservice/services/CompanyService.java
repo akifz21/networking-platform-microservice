@@ -69,11 +69,11 @@ public class CompanyService {
 
     public List<CompanyResponse> getAllByOwner(UUID ownerId){
         try {
+            UserResponse userResponse = this.userClient.getUserById(ownerId);
             List<Company> companyList = this.companyRepository.findByOwnerId(ownerId);
-            return companyList.stream().map(company -> {
-                UserResponse userResponse = userClient.getUserById(company.getOwnerId());
-                return this.companyMapper.companyToResponse(company,userResponse);
-            }).collect(Collectors.toList());
+            return companyList.stream().map(company ->
+                    this.companyMapper.companyToResponse(company,userResponse)
+            ).collect(Collectors.toList());
         }catch (FeignException e){
             throw new FetchException();
         }

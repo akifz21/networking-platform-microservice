@@ -9,11 +9,11 @@ eureka:
     preferIpAddress: true
 
 server:
-  port: 8030
+  port: 8181
 
 spring:
   application:
-    name: companies
+    name: company
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/microservices-companies
