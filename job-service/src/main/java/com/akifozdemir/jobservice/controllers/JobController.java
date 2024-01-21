@@ -3,6 +3,7 @@ package com.akifozdemir.jobservice.controllers;
 import com.akifozdemir.jobservice.dtos.JobRequest;
 import com.akifozdemir.jobservice.dtos.JobResponse;
 import com.akifozdemir.jobservice.services.JobService;
+import jakarta.ws.rs.Path;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +21,11 @@ public class JobController {
     @GetMapping
     public ResponseEntity<List<JobResponse>> getAll(){
         return ResponseEntity.ok().body(this.jobService.getAll());
+    }
+
+    @GetMapping("/company/{companyId}")
+    public ResponseEntity<List<JobResponse>> getByCompany(@PathVariable UUID companyId){
+        return ResponseEntity.ok().body(this.jobService.getByCompany(companyId));
     }
 
     @PostMapping

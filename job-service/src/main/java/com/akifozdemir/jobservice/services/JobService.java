@@ -38,6 +38,14 @@ public class JobService {
                     }).collect(Collectors.toList());
     }
 
+    public List<JobResponse> getByCompany(UUID companyId){
+        List<Job> jobs = this.jobRepository.findByCompanyId(companyId);
+        CompanyResponse companyResponse = this.companyClient.getCompany(companyId);
+        return jobs.stream()
+                .map(job -> this.jobMapper.jobToResponse(job,companyResponse))
+                .collect(Collectors.toList());
+    }
+
     public JobResponse getById(UUID id){
         Job job = this.jobRepository.findById(id).get();
         CompanyResponse company = this.companyClient.getCompany(job.getCompanyId());
