@@ -10,6 +10,7 @@ import org.mapstruct.Mappings;
 
 @Mapper(componentModel = "spring")
 public interface CompanyMapper {
+
     Company requestToComponent(CompanyRequest companyRequest);
     @Mappings({
             @Mapping(source = "user.id", target = "ownerId"),

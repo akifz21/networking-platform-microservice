@@ -32,20 +32,12 @@ public class CompanyService {
     }
     public void add(CompanyRequest companyRequest){
         Company company = this.companyMapper.requestToComponent(companyRequest);
-        company.setWorkers(new ArrayList<>());
         this.companyRepository.save(company);
     }
 
     public void delete(UUID id){
         this.companyRepository.deleteById(id);
 
-    }
-
-    public void updateWorkers(UUID companyId, List<UUID> workerIds) {
-        Company company = this.companyRepository.findById(companyId)
-                .orElseThrow(() -> new RuntimeException("Company not found."));
-        company.addWorkers(workerIds);
-        this.companyRepository.save(company);
     }
 
     public CompanyResponse getById(UUID id){

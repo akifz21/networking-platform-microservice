@@ -5,24 +5,20 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Set;
 import java.util.UUID;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Company {
+public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-    private String name;
-    private String description;
-    private String address;
-    private String email;
-    private String website;
-    private UUID ownerId;
+    private UUID userId;
 
-    @OneToMany(mappedBy = "company")
-    Set<Employee> employees;
+    @ManyToOne
+    @JoinColumn(name = "company_id")
+    Company company;
+
 }

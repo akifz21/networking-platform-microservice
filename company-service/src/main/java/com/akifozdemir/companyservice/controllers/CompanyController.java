@@ -25,11 +25,6 @@ public class CompanyController {
         return ResponseEntity.ok().body("Company added");
     }
 
-    @PutMapping("/workers/{companyId}")
-    public ResponseEntity<String> updateWorkers(@PathVariable UUID companyId,@RequestBody List<UUID> workers){
-        this.companyService.updateWorkers(companyId,workers);
-        return ResponseEntity.ok().body("Workers updated");
-    }
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable UUID id){
         this.companyService.delete(id);
@@ -52,4 +47,6 @@ public class CompanyController {
     public ResponseEntity<CompanyResponse> getById(@PathVariable UUID id){
         return ResponseEntity.ok().body(this.companyService.getById(id));
     }
+
+
 }
