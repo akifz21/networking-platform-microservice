@@ -13,16 +13,16 @@ import java.util.UUID;
 @RequestMapping("/employees")
 public class EmployeeController {
     private final EmployeeService employeeService;
-    public EmployeeController(EmployeeService employeeService){
+    public EmployeeController(EmployeeService employeeService)  {
         this.employeeService = employeeService;
     }
 
     @PostMapping
-    public ResponseEntity<String> add(EmployeeRequest employeeRequest){
+    public ResponseEntity<String> add(@RequestBody EmployeeRequest employeeRequest){
         this.employeeService.add(employeeRequest);
         return ResponseEntity.ok().body("Employee Registered Successfully");
     }
-    @GetMapping("/company/{id}")
+    @GetMapping("/company/{companyId}")
     public ResponseEntity<List<EmployeeResponse>> getByCompany(@PathVariable UUID companyId){
         return ResponseEntity.ok().body(this.employeeService.getByCompany(companyId));
     }

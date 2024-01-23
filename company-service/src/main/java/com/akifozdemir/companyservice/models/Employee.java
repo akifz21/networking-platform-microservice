@@ -19,6 +19,6 @@ public class Employee {
 
     @ManyToOne
     @JoinColumn(name = "company_id")
-    Company company;
+    private Company company;
 
 }
