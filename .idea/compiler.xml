@@ -28,6 +28,9 @@
         <module name="company-service" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="recommendation-service" target="17" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
@@ -38,6 +41,7 @@
       <module name="job-service" options="-parameters -Amapstruct.defaultComponentModel=spring" />
       <module name="message-service" options="-parameters" />
       <module name="post-service" options="-parameters -Amapstruct.defaultComponentModel=spring" />
+      <module name="recommendation-service" options="-parameters" />
       <module name="user-service" options="-parameters" />
     </option>
   </component>
