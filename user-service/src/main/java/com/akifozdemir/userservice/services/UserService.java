@@ -3,11 +3,13 @@ package com.akifozdemir.userservice.services;
 import com.akifozdemir.userservice.dtos.LoginRequest;
 import com.akifozdemir.userservice.dtos.UserRequest;
 import com.akifozdemir.userservice.dtos.UserResponse;
+import com.akifozdemir.userservice.dtos.UserUpdateRequest;
 import com.akifozdemir.userservice.exceptions.UserNotFoundException;
 import com.akifozdemir.userservice.mappers.UserMapper;
 import com.akifozdemir.userservice.models.User;
 import com.akifozdemir.userservice.repositories.UserRepository;
 import io.jsonwebtoken.Jwt;
+import org.bouncycastle.pqc.crypto.util.PQCOtherInfoGenerator;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -38,11 +40,24 @@ public class UserService {
         this.userRepository.save(user);
     }
 
+    public void update (UserUpdateRequest userUpdateRequest,UUID id){
+        userRepository.findById(id)
+                .ifPresent(user->{
+                    user.setEmail(userUpdateRequest.email());
+                    user.setFirstName(userUpdateRequest.firstName());
+                    user.setLastName(userUpdateRequest.lastName());
+                    user.setDescription(user.getDescription());
+                    userRepository.save(user);
+                });
+    }
+
     public String generateToken(LoginRequest loginRequest){
         User user = this.userRepository.findByEmail(loginRequest.email())
                 .orElseThrow(()->new UserNotFoundException());
         return jwtService.generateToken(user);
     }
+
+
 
     public UserResponse getById(UUID id){
         User user = userRepository.findById(id)

@@ -3,6 +3,7 @@ package com.akifozdemir.userservice.controllers;
 import com.akifozdemir.userservice.dtos.LoginRequest;
 import com.akifozdemir.userservice.dtos.UserRequest;
 import com.akifozdemir.userservice.dtos.UserResponse;
+import com.akifozdemir.userservice.dtos.UserUpdateRequest;
 import com.akifozdemir.userservice.services.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -41,6 +42,13 @@ public class UserController {
     public ResponseEntity<String> register(@RequestBody UserRequest userRequest){
         this.userService.add(userRequest);
         return ResponseEntity.ok().body("User Added "+userRequest.toString());
+    }
+
+    @PatchMapping("/update/{id}")
+    public ResponseEntity<String> update(@RequestBody UserUpdateRequest userUpdateRequest,
+                                         @PathVariable UUID id){
+        this.userService.update(userUpdateRequest,id);
+        return ResponseEntity.ok().body("User updated");
     }
 
     @PostMapping("/login")
