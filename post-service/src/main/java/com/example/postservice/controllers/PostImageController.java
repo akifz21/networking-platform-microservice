@@ -32,6 +32,17 @@ public class PostImageController {
 
     }
 
+    @PostMapping("/upload")
+    public ResponseEntity<String> uploadMultiple(@RequestParam("files") MultipartFile[] files,
+                                                 @RequestParam("postId") UUID postId) {
+        try {
+            postImageService.uploadMultiple(files, postId);
+            return ResponseEntity.ok().body("Images uploaded");
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error uploading images");
+        }
+    }
+
     @GetMapping("/{postId}/images")
     public ResponseEntity<List<PostImageResponse>> getAllImagesByPostId(@PathVariable UUID postId) {
         List<PostImageResponse> images = postImageService.downloadAllImagesByPostId(postId);

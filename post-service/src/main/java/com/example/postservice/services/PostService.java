@@ -95,8 +95,12 @@ public class PostService {
     public void update(PostUpdateRequest postUpdateRequest, UUID id){
         this.postRepository.
                 findById(id).
-                ifPresent(post -> post.setDescription(postUpdateRequest.description()));
+                ifPresent(post -> {
+                    post.setDescription(postUpdateRequest.description());
+                    this.postRepository.save(post);
+                });
     }
+
     public void delete(UUID id){
         this.postRepository.deleteById(id);
     }
