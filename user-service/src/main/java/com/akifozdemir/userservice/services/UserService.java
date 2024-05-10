@@ -46,7 +46,7 @@ public class UserService {
                     user.setEmail(userUpdateRequest.email());
                     user.setFirstName(userUpdateRequest.firstName());
                     user.setLastName(userUpdateRequest.lastName());
-                    user.setDescription(user.getDescription());
+                    user.setDescription(userUpdateRequest.description());
                     userRepository.save(user);
                 });
     }

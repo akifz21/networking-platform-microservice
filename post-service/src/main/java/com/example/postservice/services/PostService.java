@@ -2,6 +2,7 @@ package com.example.postservice.services;
 
 import com.example.postservice.clients.UserClient;
 import com.example.postservice.dtos.requests.PostRequest;
+import com.example.postservice.dtos.requests.PostUpdateRequest;
 import com.example.postservice.dtos.respones.PostResponse;
 import com.example.postservice.dtos.respones.UserResponse;
 import com.example.postservice.exceptions.FetchException;
@@ -91,6 +92,14 @@ public class PostService {
       }
     }
 
+    public void update(PostUpdateRequest postUpdateRequest, UUID id){
+        this.postRepository.
+                findById(id).
+                ifPresent(post -> post.setDescription(postUpdateRequest.description()));
+    }
+    public void delete(UUID id){
+        this.postRepository.deleteById(id);
+    }
     public Post getById(UUID id){
         return this.postRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Post not found"));

@@ -48,4 +48,7 @@ public class PostImageService {
                 image.getType()))
                 .collect(Collectors.toList());
     }
+    public void delete(UUID id){
+        this.postImageRepository.deleteById(id);
+    }
 }

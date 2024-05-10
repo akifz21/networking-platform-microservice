@@ -2,6 +2,7 @@ package com.example.postservice.controllers;
 
 import com.example.postservice.dtos.respones.PostImageResponse;
 import com.example.postservice.services.PostImageService;
+import feign.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,6 @@ public class PostImageController {
         this.postImageService = postImageService;
     }
 
-
     @GetMapping("/download/{id}")
     public ResponseEntity<?> download(@PathVariable UUID id){
         byte[] image = postImageService.download(id);
@@ -37,5 +37,11 @@ public class PostImageController {
         List<PostImageResponse> images = postImageService.downloadAllImagesByPostId(postId);
         return ResponseEntity.ok(images);
 
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> delete(@PathVariable UUID id){
+        this.postImageService.delete(id);
+        return ResponseEntity.ok().body("Image deleted");
     }
 }
