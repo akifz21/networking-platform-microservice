@@ -1,6 +1,21 @@
+server:
+  port: 8100
+
 spring:
+  config:
+    import: optional:configserver:http://config-server:8888
+  data:
+    mongodb:
+      uri: ${SPRING_DATA_MONGODB_URI}
   application:
     name: messages
-  config:
-    import: optional:configserver:http://localhost:8888
 
+eureka:
+  instance:
+    hostname: eureka-server
+  client:
+    service-url:
+      defaultZone: http://eureka-server:8761/eureka
+  registration:
+    enabled: true
+    preferIpAddress: true

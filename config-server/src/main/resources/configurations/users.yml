@@ -1,9 +1,7 @@
 eureka:
-  instance:
-    hostname: localhost
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: http://eureka-server:8761/eureka
   registration:
     enabled: true
     preferIpAddress: true
@@ -16,13 +14,14 @@ spring:
     name: users
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/microservices-users
+    url: jdbc:postgresql://db:5432/microservices-users
     username: postgres
-    password: 1234
+    password: postgres
   jpa:
     hibernate:
       ddl-auto: update
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
+
 jwt:
   secret: mysupersecretkeymysupersecretkeymysupersecretkey
