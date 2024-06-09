@@ -1,5 +1,59 @@
+eureka:
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://eureka-server:8761/eureka
+  instance:
+    prefer-ip-address: true
+    hostname: eureka-server
+server:
+  port: 8000
 spring:
-  application:
-    name: gateway
   config:
     import: "optional:configserver:http://localhost:8888"
+  application:
+    name: gateway
+  cloud:
+    gateway:
+      default-filters:
+        - AuthenticationFilter
+        - name: Retry
+          args:
+            retries: 3
+            statuses:
+                - BAD_GATEWAY
+                - SERVICE_UNAVAILABLE
+                - GATEWAY_TIMEOUT
+            methods:
+                - GET
+                - POST
+            exceptions:
+                - java.io.IOException
+                - org.springframework.cloud.gateway.support.NotFoundException
+                - org.springframework.cloud.gateway.support.TimeoutException
+            backoff:
+                firstBackoff: 10ms
+                maxBackoff: 50ms
+                factor: 2
+
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "http://localhost:3000"
+            allowedHeaders:
+              - "*"
+            allowedMethods:
+              - GET
+              - POST
+              - DELETE
+              - PUT
+              - OPTIONS
+              - PATCH
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+
+jwt:
+  secret: mysupersecretkeymysupersecretkeymysupersecretkey

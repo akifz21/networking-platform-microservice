@@ -9,6 +9,28 @@ services:
     networks:
       - my-network
 
+
+  api-gateway:
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - 8000:8000
+    networks:
+      - my-network
+    depends_on:
+      - eureka-server
+      - config-server
+      - user-service
+      - post-service
+      - job-service
+      - company-service
+      - users-db
+      - posts-db
+      - jobs-db
+      - company-db
+
   eureka-server:
     build:
       context: ./discovery-server
@@ -103,6 +125,11 @@ services:
       - users-db
       - eureka-server
     restart: always
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8020/actuator/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
 
   post-service:
     build:
@@ -120,6 +147,12 @@ services:
     depends_on:
       - posts-db
       - eureka-server
+    restart: always
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8010/actuator/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
 
   job-service:
     build:
@@ -137,6 +170,7 @@ services:
       - eureka-server
     networks:
       - my-network
+    restart: always
 
   company-service:
     build:
@@ -154,6 +188,7 @@ services:
       - eureka-server
     networks:
       - my-network
+    restart: always
 
 #  message-service:
 #    build:
