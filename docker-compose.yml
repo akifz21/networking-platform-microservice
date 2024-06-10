@@ -190,19 +190,20 @@ services:
       - my-network
     restart: always
 
-#  message-service:
-#    build:
-#      context: ./message-service
-#      dockerfile: Dockerfile
-#    ports:
-#      - 8100:8100
-#    environment:
-#      - SPRING_DATA_MONGODB_URI=mongodb://messages-db:27017/microservices-messages
-#    networks:
-#      - my-network
-#    depends_on:
-#      - messages-db
-#      - eureka-server
+  message-service:
+    build:
+      context: ./message-service
+      dockerfile: Dockerfile
+    ports:
+      - 8100:8100
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://messages-db:27017/microservices-messages
+    networks:
+      - my-network
+    depends_on:
+      - messages-db
+      - eureka-server
+    restart: always
 
 networks:
   my-network:

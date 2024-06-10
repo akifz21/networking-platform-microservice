@@ -1,15 +1,7 @@
 #spring:
 #  application:
 #    name: jobs
-eureka:
-  instance:
-    hostname: eureka-server
-  client:
-    service-url:
-      defaultZone: http://eureka-server:8761/eureka
-  registration:
-    enabled: true
-    preferIpAddress: true
+
 server:
   port: 8040
 spring:
@@ -27,3 +19,11 @@ spring:
       ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO}
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka-server:8761/eureka
+  registration:
+    enabled: true
+    preferIpAddress: true
