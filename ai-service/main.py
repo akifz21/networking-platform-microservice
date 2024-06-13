@@ -1,7 +1,9 @@
-import requests
-from fastapi import FastAPI
+import numpy as np
+from sklearn.metrics.pairwise import cosine_similarity
+from sklearn.feature_extraction.text import TfidfVectorizer
 from fastapi.middleware.cors import CORSMiddleware
-import spacy
+from fastapi import FastAPI
+import requests
 
 app = FastAPI()
 
@@ -14,9 +16,6 @@ app.add_middleware(
 )
 
 
-nlp = spacy.load("en_core_web_md")
-
-
 @app.post("/recommendation/")
 async def recommendation(user_description: str):
     jobs_response = requests.get("http://localhost:8040/")
@@ -25,14 +24,21 @@ async def recommendation(user_description: str):
     else:
         return {"error": "Jobs error"}
 
-    user_doc = nlp(user_description)
+    job_descriptions = [job["description"] for job in jobs]
+
+    vectorizer = TfidfVectorizer(stop_words='english')
+    job_vectors = vectorizer.fit_transform(job_descriptions)
+
+    user_vector = vectorizer.transform([user_description])
+
+    similarities = cosine_similarity(user_vector, job_vectors).flatten()
+
     recommended_jobs = []
-    for job_description in jobs:
-        job_doc = nlp(job_description["description"])
-        similarity_score = user_doc.similarity(job_doc)
-        if similarity_score > 0.3:
+    for i, similarity_score in enumerate(similarities):
+        if similarity_score > 0.0:
             recommended_jobs.append(
-                {"job": job_description, "similarity_score": similarity_score})
+                {"job": jobs[i], "similarity_score": similarity_score})
+
     return {"recommended_jobs": recommended_jobs}
 
 
