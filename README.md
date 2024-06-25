@@ -55,7 +55,7 @@ Follow these steps to set up the project locally.
 
 1. Clone this repository:
    ```sh
-   git clone <repository-url>
+   git clone https://github.com/akifzdemir/networking-platform-microservice.git
 
 2. Change to the project directory:
    ```sh
