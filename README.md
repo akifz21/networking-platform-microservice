@@ -16,8 +16,8 @@ This project includes several microservices that perform different functions:
 - User Service: Manages user operations.
 - Job Service: Manages job listings and applications.
 - Company Service: Manages company information.
-- Message Service: Manages messaging operations.
-- Post Service: Manages posts and shares.
+- Message Service: Manages messaging operations with web socket.
+- Post Service: Manages posts, comments and likes.
 - AI Service: Performs artificial intelligence-related tasks.
 - API Gateway: The main entry point through which all requests are routed.
 - Config Server: Manages the configurations of other microservices.
@@ -30,9 +30,9 @@ This project includes several microservices that perform different functions:
 - **User Service**: Uses PostgreSQL and communicates with Job Service, Company Service, and Post Service via Feign Client.
 - **Job Service**: Uses PostgreSQL and communicates with User Service via Feign Client.
 - **Company Service**: Uses PostgreSQL and communicates with User Service via Feign Client.
-- **Message Service**: Uses MongoDB.
+- **Message Service**: Uses MongoDB and Web socket.
 - **Post Service**: Uses PostgreSQL and communicates with User Service via Feign Client.
-- **AI Service**: Uses PostgreSQL.
+- **AI Service**: Uses Fast API and Sklearn.
 - **API Gateway**: Routes all requests to the appropriate microservice.
 - **Config Server**: Manages the configurations of other microservices.
 - **Discovery Server**: Enables microservices to discover each other.
